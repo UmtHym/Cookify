@@ -3,8 +3,8 @@ const Recipe = require("../models/Recipe");
 const Favorite = require("../models/Favorite");
 
 module.exports = {
-  getProfile: async (req, res) => { 
-    console.log(req.user)
+  getProfile: async (req, res) => {
+    console.log(req.user);
     try {
       //Since we have a session each request (req) contains the logged-in users info: req.user
       //console.log(req.user) to see everything
@@ -16,15 +16,17 @@ module.exports = {
       console.log(err);
     }
   },
-  getFavorites: async (req, res) => { 
-    console.log(req.user)
+  getFavorites: async (req, res) => {
+    console.log(req.user);
     try {
       //Since we have a session each request (req) contains the logged-in users info: req.user
       //console.log(req.user) to see everything
       //Grabbing just the posts of the logged-in user
-      const recipes = await Favorite.find({ user: req.user.id }).populate('recipe');
+      const recipes = await Favorite.find({ user: req.user.id }).populate(
+        "recipe"
+      );
 
-      console.log(recipes)
+      console.log(recipes);
 
       //Sending post data from mongodb and user data to ejs template
       res.render("favorites.ejs", { recipes: recipes, user: req.user });
@@ -39,7 +41,7 @@ module.exports = {
       //http://localhost:2121/post/631a7f59a3e56acfc7da286f
       //id === 631a7f59a3e56acfc7da286f
       const recipe = await Recipe.findById(req.params.id);
-      res.render("recipe.ejs", { recipe: recipe, user: req.user});
+      res.render("recipe.ejs", { recipe: recipe, user: req.user });
     } catch (err) {
       console.log(err);
     }
@@ -49,7 +51,7 @@ module.exports = {
       // Upload image to cloudinary
       const result = await cloudinary.uploader.upload(req.file.path);
 
-      //media is stored on cloudainary - the above request responds with url to media and the media id that you will need when deleting content 
+      //media is stored on cloudainary - the above request responds with url to media and the media id that you will need when deleting content
       await Recipe.create({
         name: req.body.name,
         image: result.secure_url,
@@ -67,7 +69,7 @@ module.exports = {
   },
   favoriteRecipe: async (req, res) => {
     try {
-      //media is stored on cloudainary - the above request responds with url to media and the media id that you will need when deleting content 
+      //media is stored on cloudainary - the above request responds with url to media and the media id that you will need when deleting content
       await Favorite.create({
         user: req.user.id,
         recipe: req.params.id,
