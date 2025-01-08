@@ -1,137 +1,156 @@
-# Recipe App
+# Cookify
 
-A full-stack web application built to help users manage and share their favorite recipes. This app allows users to create, view, and edit recipes, upload images, and manage their account. The app utilizes MongoDB for data storage, Cloudinary for image management, Passport.js for authentication, and integrates various other technologies for a smooth user experience.
-
----
+Cookify is a web application that allows users to browse, create, and save their favorite recipes. It includes user authentication, the ability to add and view recipes, and a personalized profile page to manage saved recipes. The app integrates Cloudinary for image hosting and Multer for file handling.
 
 ## Table of Contents
 
-- [Technologies](#technologies)
 - [Features](#features)
-- [Setup Instructions](#setup-instructions)
-- [API Endpoints](#api-endpoints)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Folder Structure](#folder-structure)
+- [Technologies Used](#technologies-used)
+- [Usage](#usage)
 - [Contributing](#contributing)
 - [License](#license)
 
----
-
-## Technologies
-
-- **Frontend**:
-  - React
-  - React Router
-  - Axios (for HTTP requests)
-  - TailwindCSS (for styling)
-- **Backend**:
-  - Node.js
-  - Express.js
-  - MongoDB (with Mongoose for schema modeling)
-  - Cloudinary (for image hosting and management)
-  - Passport.js (for user authentication)
-  - Bcrypt (for password hashing)
-- **Others**:
-  - dotenv (for environment variable management)
-  - Nodemon (for auto-restarting the server during development)
-
----
-
 ## Features
 
-- **User Authentication**:
-  - Sign up with email and password.
-  - Login to access and manage your profile.
-  - Logout functionality.
-- **Recipe Management**:
+- User authentication (Sign up, Log in, Log out)
+- Add, update, and delete recipes
+- Save favorite recipes
+- Profile page for managing saved recipes
+- Recipe image uploads (using Multer and Cloudinary)
+- Responsive and user-friendly UI
 
-  - Create, read, update, and delete recipes.
-  - Upload and display recipe images using Cloudinary.
-  - Each recipe includes ingredients, instructions, and category labels.
+## Installation
 
-- **Responsive Design**:
+### Prerequisites
 
-  - Fully responsive user interface optimized for both desktop and mobile views.
+Ensure you have the following installed:
 
-- **Data Storage**:
-  - MongoDB database for storing user information, recipes, and image URLs.
-  - Mongoose for managing database schemas.
+- [Node.js](https://nodejs.org/)
+- [MongoDB](https://www.mongodb.com/)
+- [Cloudinary Account](https://cloudinary.com/) (for image hosting)
 
----
+### Steps to Run the Project Locally
 
-## Setup Instructions
-
-1. **Clone the repository**:
-
-   ```bash
-   git clone <repository-url>
-   cd Recipe-App
-   ```
-
-2. **Install dependencies**:
-
-   Run this command to install backend and frontend dependencies:
-
-   ```bash
-   npm install
-   ```
-
-3. \*\*Set up environment variables:
-
-Create a .env file in the root of your project with the following keys:
+1. Clone the repository:
 
 ```bash
-MONGO_URI=<Your-MongoDB-URI>
-CLOUDINARY_URL=<Your-Cloudinary-URL>
-SESSION_SECRET=<Your-Session-Secret>
-JWT_SECRET=<Your-JWT-Secret>
-GOOGLE_CLIENT_ID=<Your-Google-Client-ID>
-GOOGLE_CLIENT_SECRET=<Your-Google-Client-Secret>
+git clone https://github.com/your-username/Cookify.git
+cd Cookify
 ```
 
-4. \*\*Run the app:
-
-• Start the backend server:
+2. Install dependencies:
 
 ```bash
-npm run dev
+npm install
 ```
 
-• Start the frontend:
+3. Set up your environment variables by creating a .env file in the config directory. You need to configure the following:
 
 ```bash
-npm run start
+PORT=5000
+MONGO_URI=your_mongo_connection_string
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+SESSION_SECRET=your_session_secret
 ```
 
-The app should now be running on `http://localhost:3000` (or another specified port).
+4. Run the application:
 
-## API Endpoints
+```bash
+npm start
+```
 
-### User Routes
+The app will be running on http://localhost:5000.
 
-- `POST /signup`: Create a new user.
-- `POST /login`: Log in an existing user.
-- `GET /profile`: View the logged-in user’s profile.
-- `GET /logout`: Log out the user.
+## Configuration
 
-### Recipe Routes
+- Database: MongoDB is used for storing user data and recipes. The connection string is configured in the .env file.
+- Cloudinary: Used for storing recipe images. Set up your Cloudinary credentials in the .env file.
+- Session: The app uses a session for user authentication. The SESSION_SECRET in the .env file should be a strong, unique string.
 
-- `GET /recipes`: Fetch all recipes.
-- `POST /recipes`: Create a new recipe (requires authentication).
-- `GET /recipes/:id`: View a specific recipe.
-- `PUT /recipes/:id`: Edit an existing recipe (requires authentication).
-- `DELETE /recipes/:id`: Delete a recipe (requires authentication).
+## Folder Structure
+
+```
+└── 📁Cookify
+    └── 📁config
+        └── .env               # Environment variables
+        └── database.js        # MongoDB connection
+        └── passport.js        # Passport authentication setup
+    └── 📁controllers
+        └── auth.js            # Authentication logic
+        └── home.js            # Home page logic
+        └── recipe.js          # Recipe-related logic
+    └── 📁middleware
+        └── auth.js            # Middleware for authentication check
+        └── cloudinary.js      # Middleware for Cloudinary image upload
+        └── multer.js          # Middleware for file handling
+    └── 📁models
+        └── Favorite.js        # Favorite recipes model
+        └── Recipe.js          # Recipe model
+        └── User.js            # User model
+    └── 📁public
+        └── .DS_Store
+        └── 📁css
+            └── style.css     # Application styling
+        └── 📁imgs
+            └── favicon-32x32.png
+            └── favicon.ico   # Favicon images
+    └── 📁routes
+        └── main.js            # Routes for the home page and general navigation
+        └── recipe.js          # Routes for handling recipe-related actions
+    └── 📁views
+        └── favorites.ejs      # Template for the user's favorite recipes
+        └── index.ejs          # Home page template
+        └── login.ejs          # Login page template
+        └── 📁partials
+            └── footer.ejs    # Footer partial
+            └── header.ejs    # Header partial
+        └── profile.ejs        # User profile page template
+        └── recipe.ejs         # Individual recipe page template
+        └── signup.ejs         # Signup page template
+    └── .gitignore             # Git ignore file
+    └── package-lock.json      # Lockfile for dependencies
+    └── package.json           # Project metadata and dependencies
+    └── Procfile               # For Heroku deployment
+    └── README.md              # Project documentation
+    └── server.js              # Server setup and configuration
+
+```
+
+## Technologies Used
+
+- Node.js: Server-side JavaScript runtime.
+- Express: Web framework for building the server.
+- MongoDB: NoSQL database for storing user data and recipes.
+- Mongoose: ODM (Object Data Modeling) library for MongoDB and Node.js.
+- Passport.js: Middleware for handling authentication.
+- Cloudinary: Cloud storage service for recipe images.
+- Multer: Middleware for handling multipart/form-data (used for file uploads).
+- EJS: Templating engine for rendering dynamic HTML pages.
+- CSS: Custom styles using style.css.
+
+## Usage
+
+- Sign Up / Log In: Users can create an account or log in using the authentication system.
+- Browse Recipes: Users can view a list of recipes on the homepage and explore individual recipe details.
+- Create a Recipe: Logged-in users can add new recipes by filling out a form, including uploading an image.
+- Save Favorite Recipes: Users can mark recipes as favorites to view later on their profile page.
 
 ## Contributing
 
-We welcome contributions! Please fork the repository and submit a pull request with your changes.
+We welcome contributions to improve Cookify! If you want to contribute:
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature-name`)
-3. Commit your changes (`git commit -am 'Add new feature'`)
-4. Push to the branch (`git push origin feature-name`)
-5. Create a new Pull Request
+1. Fork the repository.
+2. Create a new branch (git checkout -b feature-name).
+3. Make your changes.
+4. Commit your changes (git commit -am 'Add new feature').
+5. Push to your branch (git push origin feature-name).
+6. Create a new Pull Request.
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-The app should now be running on http://localhost:3000 (or another specified port).
+This project is open-source and available under the MIT License.
